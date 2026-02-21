@@ -5,7 +5,7 @@ def test_poshmark_search(page : Page, base_url: str):
 	search_page=PoshmarkSearchPage(page)
 
 	page.goto(base_url)
-	search_page.item_search("Nike shoes")
+	search_page.item_search("Puma Shoes")
 	search_page.apply_filter("availability", "Available Items")
 
 	expect(search_page.search_title).to_contain_text("Search results for : ")
