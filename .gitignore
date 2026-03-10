@@ -1,4 +1,4 @@
 authandtools/
-_pycache
-.pytest_cache
-__pycache__
+venv/
+.pytest_cache/
+__pycache__/
