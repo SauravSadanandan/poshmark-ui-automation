@@ -1,5 +1,5 @@
 from playwright.sync_api import Page
-class PoshmarkSearchPage:
+class PoshmarkFeed:
 
 	def __init__(self,page: Page):
 		self.page = page
@@ -17,6 +17,9 @@ class PoshmarkSearchPage:
 
 		category = self.page.get_by_text(filter_name)
 		option  = self.page.get_by_text(filter_option)
+
+		category.scroll_into_view_if_needed()
+		option.scroll_into_view_if_needed()
 
 		if not option.is_visible():
 			category.click()
