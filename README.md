@@ -32,6 +32,7 @@ poshmark-ui-automation/
 │   └── verify_posh_login.py       # Quick script to check if your session is still valid
 ├── conftest.py                    # Pytest fixtures and custom terminal commands
 └── pytest.ini                     # Registers markers (smoke, regression) and trace configs
+```
 
 **How to Run This on Your Computer**
 
