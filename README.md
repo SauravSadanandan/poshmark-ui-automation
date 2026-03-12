@@ -1,31 +1,38 @@
+# Poshmark UI Automation Project 🛍️
 
-# Poshmark UI Automation Project
+I built this UI automation framework to test the Poshmark website. The goal was to practice writing clean, maintainable test code using **Python** and **Playwright**, while solving real-world automation problems like handling dynamic dropdowns and bypassing login screens.
 
-This is a UI automation project I built to test the Poshmark website. I created this to practice writing clean, reusable test code using Python and Playwright.
+## The Tools
+* **Python** * **Playwright** (for fast, reliable browser automation)
+* **Pytest** (for running tests and managing custom CLI arguments)
+* **Page Object Model (POM)** (to keep the locators separate from the test logic)
 
-## Tools Used
-* **Python**
-* **Playwright** (for browser automation)
-* **Pytest** (for running the tests)
-* **Page Object Model (POM)** (for organizing the code)
+## The Coolest Features in This Repo
 
-## What Makes This Code Special
+Instead of just recording and playing back clicks, I wrote a few custom solutions that I'm really proud of:
 
-* **Organized Code (POM):** I separated the test data from the website actions. The `tests` file only gives commands, and the `pages` file handles the actual clicking and typing.
-* **Dynamic Filter Method:** Instead of writing a separate method for every single filter on Poshmark (like Brands, Size, Condition), I wrote one dynamic `apply_filter()` method. It can click any filter category and option just by passing in the text.
-* **Smart Clicking Logic:** The code is smart enough to check if a drop-down menu is hidden. If the option isn't visible, it automatically clicks the category header to open the menu first.
-* **Reliable Locators:** I used Playwright's `exact=True` for text matching so the tests don't accidentally click the wrong buttons.
+* **Saved Login States:** Logging in before every single test takes way too much time. I wrote a standalone script (`other_scripts/posh_login.py`) that logs into Poshmark once and saves the browser cookies to a `json` file. The Pytest suite then injects this file so all tests start fully authenticated.
+* **Dynamic Filter Engine:** Instead of hardcoding separate functions for "Filter by Brand", "Filter by Size", etc., I wrote one `apply_filter()` method. You just pass in the category and the option as text, and it figures out how to scroll, expand hidden menus, and click the right box.
+* **Custom Pytest Commands:** I set up `conftest.py` with custom command-line arguments. You can trigger a test and tell it exactly what to search for right from the terminal (e.g., `pytest --item="Nike Shoes" --filter_by="Condition"`). 
+* **Smart UI Toggles:** Poshmark feed items can be tricky to test because they might already be "liked" from a previous test run. I built a `force_like_first_listing` method that checks the current state of the heart icon first, ensuring the test always ends in the exact state it expects without crashing.
+* **Built-in Trace Viewer:** If a test fails, `pytest.ini` is configured to automatically save a time-traveling trace file so I can debug exactly what went wrong frame-by-frame.
 
-**Project Files**
+## Project Layout
 ```text
-AutomationProject/
+poshmark-ui-automation/
 ├── pages/
-│   └── poshmark_search_page.py    # Holds the locators and clicking actions
+│   └── poshmark_feed_page.py      # Holds all locators, search logic, and filter methods
 ├── tests/
-│   └── test_poshmark_search.py    # Holds the actual test steps and assertions
-├── conftest.py                    # Setup file for Pytest
-└── README.md                      # This file
-```
+│   ├── test_feed_likefunc.py      # Tests the like/unlike toggle
+│   ├── test_feed_loads.py         # Verifies the main feed loads correctly
+│   ├── test_feed_navigation.py    # Tests clicking into a listing
+│   └── test_search_and_filter.py  # Tests the search bar and dynamic filtering
+├── other_scripts/
+│   ├── posh_login.py              # Run this first! Generates the auth state file
+│   └── verify_posh_login.py       # Quick script to check if your session is still valid
+├── conftest.py                    # Pytest fixtures and custom terminal commands
+└── pytest.ini                     # Registers markers (smoke, regression) and trace configs
+
 **How to Run This on Your Computer**
 
 If you want to download this code and run the automation on your own machine, follow these steps:
