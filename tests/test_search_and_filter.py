@@ -1,8 +1,11 @@
 from playwright.sync_api import Page, expect
-from pages.poshmark_feed_page import PoshmarkFeed
+import pytest
+from pages.poshmark_feed_page import poshmarkFeed
 
-def test_poshmark_search_n_filter(page : Page, base_url: str, search_item: str, filter_category: str, filter_option: str):
-	search_page=PoshmarkFeed(page)
+pytestmark = pytest.mark.regression
+
+def test_search_bar(page : Page, base_url: str, search_item: str, filter_category: str, filter_option: str):
+	search_page=poshmarkFeed(page)
 
 	page.goto(base_url)
 	search_page.item_search(search_item)
