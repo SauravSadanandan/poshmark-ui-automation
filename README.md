@@ -54,5 +54,5 @@ playwright install
 **3. Run the test**
 This command will open a visible browser so you can watch the automation search and filter in real-time:
 ```bash
-pytest tests/test_poshmark_search.py --headed
+pytest tests/
 ```
