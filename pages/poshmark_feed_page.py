@@ -38,8 +38,10 @@ class poshmarkFeed:
 	def return_filter(self,text_name: str):
 		return self.page.get_by_text(text_name)
 	
-	def click_first_like(self):
+	def force_like_first_listing(self):
 		if not self.first_like_button.is_visible(timeout=2000):	
 			self.first_unlike_button.click()
+			self.page.wait_for_timeout(2000)
+			self.first_like_button.click()			
 		else:
 			self.first_like_button.click()
