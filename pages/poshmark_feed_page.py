@@ -10,7 +10,7 @@ class poshmarkFeed:
 		self.sold_tag = page.locator(".icon.tile__inventory-tag.sold-tag")
 		self.first_new_listing = page.get_by_text("New Listings").first
 		self.first_feed_unit = page.locator(".feed__unit").first
-		self.first_feed_image = page.locator(".feed__unit__content picture img").first
+		self.first_feed_image = page.locator(".feed__unit__content .img__container img").first
 		self.first_listing_image = page.locator(".img__container picture img").first
 		self.buy_now_button = page.get_by_role("button", name="Buy Now")
 		self.first_like_button = page.locator(".heart-black-empty").first

@@ -5,7 +5,7 @@ pytestmark = pytest.mark.smoke
 
 def test_feed_likefunc(page :Page, base_url: str):
     current_test = poshmarkFeed(page)
-    page.goto(base_url)
+    page.goto(base_url, wait_until="domcontentloaded")
 
     expect(current_test.first_new_listing).to_be_visible()
     expect(current_test.first_feed_unit).to_be_visible()

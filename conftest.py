@@ -34,7 +34,7 @@ def pytest_addoption(parser):
 def browser_context_args(browser_context_args):
     return {
         **browser_context_args,
-        "storage_state": "authandtools/.auth/posh_login.json",
+        "storage_state": "other_scripts/posh_login.json",
         "viewport": {"width": 1920, "height": 1080}
     }
 

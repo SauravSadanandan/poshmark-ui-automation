@@ -7,7 +7,7 @@ pytestmark = pytest.mark.regression
 def test_search_bar(page : Page, base_url: str, search_item: str, filter_category: str, filter_option: str):
 	search_page=poshmarkFeed(page)
 
-	page.goto(base_url)
+	page.goto(base_url,wait_until="domcontentloaded")
 	search_page.item_search(search_item)
 	search_page.apply_filter(filter_category, filter_option)
 

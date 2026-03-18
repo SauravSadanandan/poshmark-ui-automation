@@ -1,27 +1,24 @@
-from  playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright
 
 def test_poshmark_loginstate():
     with sync_playwright() as p:
-        browser = p.firefox.launch(headless=False, slow_mo=1000)
-        try:
-            context = browser.new_context(storage_state="posh_login.json")
-
-        except Exception as e:
-            print(f"Failed to load login state! Please run posh_login.py first. error: {e}")
-            browser.close()
-            return
+        browser = p.chromium.launch(headless=False, args=["--disable-blink-features=AutomationControlled"])
+        context = browser.new_context(
+            storage_state="posh_login.json",
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        )
         page = context.new_page()
 
-        page.goto("https://poshmark.com/feed")
-        page.wait_for_timeout(5000)  # Wait for potential redirects and page load
-        current_url = page.url
-        if "login" in current_url:
-            print("Login state is invalid or expired. Please run posh_login.py to refresh it.")
-        else:
-            print("Login state is valid! Successfully accessed feed page.")
-            print(f"Current URL: {current_url}")
+        print("Navigating to Poshmark Feed...")
+        
+        page.goto("https://poshmark.com/feed", wait_until="domcontentloaded", timeout=5000)
 
-        page.wait_for_timeout(5000)
+        try:
+            page.wait_for_selector(".feed__unit__header", timeout=15000)
+            print("✅ SUCCESS: state file is working")
+        except Exception as e:
+            print("❌ FAILED: state file failed, please run posh_login.py to recreate login state")
+            
         browser.close()
 
 if __name__ == "__main__":

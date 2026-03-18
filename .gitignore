@@ -4,4 +4,6 @@ _pycache
 __pycache__
 test-results/
 venv/
+posh_login.json
+.vscode
 *.log
