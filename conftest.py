@@ -32,8 +32,7 @@ def pytest_sessionstart(session):
             password_field.press_sequentially("test123", delay=100)
             page.wait_for_timeout(1000)
             page.get_by_role("button", name="Login").click()
-            print("\n*** ACTION REQUIRED ***")
-            print("Please log in and complete the OTP verification in the browser window.")
+            print("\n Please log in and complete the OTP verification in the browser window.")
             
             try:
             # The script automatically waits for the feed to load. No manual input needed!
