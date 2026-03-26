@@ -10,3 +10,4 @@ posh_login.json
 tests/test_price_filter.py
 report.html
 assets/
+other_scripts/
