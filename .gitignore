@@ -9,4 +9,4 @@ posh_login.json
 *.log
 tests/test_price_filter.py
 report.html
-assests/
+assets/
