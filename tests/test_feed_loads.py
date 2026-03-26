@@ -5,13 +5,13 @@ from pages.poshmark_feed_page import poshmarkFeed
 pytestmark = pytest.mark.smoke
 
 def test_feed_smoke(page : Page, base_url: str):
-    current_test = poshmarkFeed(page)
+    feed_page = poshmarkFeed(page)
     page.goto(base_url,wait_until="domcontentloaded")
 
     
-    expect(current_test.first_new_listing).to_be_visible()
-    expect(current_test.first_feed_unit).to_be_visible()
-    expect(current_test.first_feed_image).to_be_visible()
+    expect(feed_page.feed_new_listing_tag.first).to_be_visible()
+    expect(feed_page.feed_unit.first).to_be_visible()
+    expect(feed_page.feed_image.first).to_be_visible()
 
 
     

@@ -9,6 +9,7 @@ Once the user successfully logs in and the feed loads, it saves the authenticati
 '''
 STATE_FILE = "other_scripts/posh_login.json"
 
+
 def pytest_sessionstart(session):
     
     # checking if auth state exists, if not we need to log in manually
@@ -22,32 +23,50 @@ def pytest_sessionstart(session):
 
 
             # Autofill login credentials to save you time, but the user must complete the OTP verification manually in the browser window.
-            page.goto("https://poshmark.com/login")
+            page.goto("https://poshmark.com/login", wait_until="domcontentloaded", timeout=60000)
             email_field = page.get_by_placeholder("Username or Email")
             email_field.click()
-            email_field.press_sequentially("sauravforapps@gmail.com", delay=100)
-            
+            email_field.press_sequentially("sauravforapps@gmail.com", delay=150)
+
             password_field = page.get_by_placeholder("Password")
             password_field.click()
-            password_field.press_sequentially("test123", delay=100)
+            password_field.press_sequentially("test123", delay=150)
             page.wait_for_timeout(1000)
             page.get_by_role("button", name="Login").click()
             print("\n Please log in and complete the OTP verification in the browser window.")
             
             try:
             # The script automatically waits for the feed to load. No manual input needed!
-                page.wait_for_selector(".feed__unit__header",state="domcontentloaded", timeout=30000)
+                page.wait_for_selector(".feed__unit__header",state="visible", timeout=0)
                 
                 # If the script finds the feed unit, it instantly saves the state.
-                context.storage_state(path="posh_login.json")
+                context.storage_state(path="other_scripts/posh_login.json")
                 print(f"\n Authentication successful! State saved to {STATE_FILE}.")
 
             except Exception as e:
                 print("\n❌ Automation Failed.")
-                print("Reason: Poshmark likely threw a Captcha or security check that blocked the automated login.")
                 print(f"Error details: {e}")          
 
             browser.close()
+
+            pytest.exit("\n❌ CRITICAL ERROR: Authentication failed or was aborted. 'posh_login.json' was not created. Aborting all tests to prevent cascading failures.")
+
+
+@pytest.fixture(scope="session")
+def browser_context_args(browser_context_args):
+    return {
+        **browser_context_args,
+        "storage_state": STATE_FILE,
+        "viewport": {"width": 1920, "height": 1080},
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    }
+
+@pytest.fixture(scope="session")
+def browser_type_launch_args(browser_type_launch_args):
+    return {
+        **browser_type_launch_args,
+        "args": ["--disable-blink-features=AutomationControlled"]
+    }
 
 
 '''
@@ -87,21 +106,6 @@ def pytest_addoption(parser):
 these fixtures modify the browser context and launch arguments to include the authentication state saved from the manual login process, 
 as well as set a realistic user agent and viewport size. This ensures that all tests run with the authenticated session and mimic a real user's browser environment.
 '''
-@pytest.fixture(scope="session")
-def browser_context_args(browser_context_args):
-    return {
-        **browser_context_args,
-        "storage_state": "other_scripts/posh_login.json",
-        "viewport": {"width": 1920, "height": 1080},
-        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    }
-
-@pytest.fixture(scope="session")
-def browser_type_launch_args(browser_type_launch_args):
-    return {
-        **browser_type_launch_args,
-        "args": ["--disable-blink-features=AutomationControlled"]
-    }
 
 @pytest.fixture(scope="session")
 def base_url(request):
