@@ -7,7 +7,6 @@ venv/
 posh_login.json
 .vscode
 *.log
-tests/test_price_filter.py
 report.html
 assets/
 other_scripts/
